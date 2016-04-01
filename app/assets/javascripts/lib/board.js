@@ -22,7 +22,7 @@
       for (var row = TOTAL_ROWS - 1; row >= 0; row--){
         var rowTiles = [];
 
-        for (var col = 0; col < 0; col++){
+        for (var col = 0; col < TOTAL_COLUMNS; col++){
           var tile = this.board[row][col];
           rowTiles.push(tile.value);
         }
