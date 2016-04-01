@@ -2,14 +2,13 @@
 
   var WINNING_SCORE = 4;
 
-  var DIRECTIONS = ['horizontal', 'vertical', 'rightDiagonal', 'leftDiagonal'];
 
-  App.Tile = function(value){
+  App.Disc = function(value){
     this.value = value;
     this._initScore();
   };
 
-  App.Tile.prototype = {
+  App.Disc.prototype = {
 
     addHorizontalScore: createScoreAdder('horizontal'),
     addVerticalScore: createScoreAdder('vertical'),
@@ -36,8 +35,8 @@
 
 
   function createScoreAdder(direction){
-    var adder = function(otherTile){
-      this.score[direction] += otherTile.score[direction];
+    var adder = function(otherDisc){
+      this.score[direction] += otherDisc.score[direction];
     };
 
     return adder;
