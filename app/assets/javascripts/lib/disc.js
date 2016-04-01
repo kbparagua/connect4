@@ -23,12 +23,12 @@
     },
 
     _initScore: function(){
-      this.score = {};
-
-      for (var i = 0, n = DIRECTIONS.length; i < n; i++){
-        var direction = DIRECTIONS[i];
-        this.score[direction] = 1;
-      }
+      this.score = {
+        horizontal: 1,
+        vertical: 1,
+        rightDiagonal: 1,
+        leftDiagonal: 1
+      };
     }
 
   };

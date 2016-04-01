@@ -8,9 +8,29 @@
 
   App.Board = function(){
     this._initGrid();
+    this._activeSymbol = null;
   };
 
   App.Board.prototype = {
+
+    activateSymbol: function(symbol){
+      this._activeSymbol = symbol;
+    },
+
+    dropTo: function(column){
+      var disc = new App.Disc( this._activeSymbol );
+
+      for (var r = 0; r < TOTAL_ROWS; r++){
+        var targetCell = this._grid[r][column];
+
+        if ( targetCell == null ){
+          this._grid[r][column] = disc
+          return true;
+        }
+      }
+
+      return false;
+    },
 
     get: function(row, col){
       if ( !this._grid[row] ) return null;
