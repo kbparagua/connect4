@@ -18,9 +18,23 @@
       this._toggleSymbol();
 
       console.log( this.board.toString() );
+      console.log( this._getStatus() );
+    },
+
+    _getStatus: function(){
+      var status = null;
 
       var arbiter = new App.Arbiter(this.board);
-      console.log('has winner? ' + arbiter.hasWinner());
+      if ( arbiter.hasWinner(this.board) )
+        status = 'game over';
+
+      else if ( this.board.isFull() )
+        status = 'draw';
+
+      else
+        status = 'ongoing'
+
+      return status;
     },
 
     _toggleSymbol: function(){

@@ -5,7 +5,7 @@
   };
 
   App.Arbiter.prototype = {
-
+    
     hasWinner: function(){
       for (var row = 0; row < this._board.totalRows; row++)
         for (var col = 0; col < this._board.totalColumns; col++)
