@@ -1,0 +1,13 @@
+- if @form.errors.any?
+  .alert.alert-danger
+    - @form.errors.full_messages.each do |error|
+      %p= error
+
+= form_for @form do |f|
+
+  .control-group
+    = f.label :player_name
+    = f.text_field :player_name
+
+  %div
+    = f.submit :Create

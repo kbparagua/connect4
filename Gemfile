@@ -9,6 +9,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'haml-rails'
 gem 'bootstrap-sass'
+gem 'reform', '~> 2.1.0'
 
 group :development, :test do
   gem 'byebug'
