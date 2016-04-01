@@ -1,12 +1,11 @@
 (function(){
 
-  var WINNING_SCORE = 4,
-      DEFAULT_VALUE = '_';
+  var WINNING_SCORE = 4;
 
   var DIRECTIONS = ['horizontal', 'vertical', 'rightDiagonal', 'leftDiagonal'];
 
-  App.Tile = function(){
-    this.value = DEFAULT_VALUE;
+  App.Tile = function(value){
+    this.value = value;
     this._initScore();
   };
 

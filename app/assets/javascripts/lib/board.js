@@ -3,17 +3,18 @@
   var TOTAL_ROWS = 6,
       TOTAL_COLUMNS = 7;
 
+  var BLANK_TILE_SYMBOL = '_';
+
 
   App.Board = function(){
-    this.board = [];
-    this._initBoard();
+    this._initGrid();
   };
 
   App.Board.prototype = {
 
     get: function(row, col){
-      if ( !this.board[row] ) return null;
-      return this.board[row][col] || null;
+      if ( !this._grid[row] ) return null;
+      return this._grid[row][col] || null;
     },
 
     toString: function(){
@@ -23,8 +24,10 @@
         var rowTiles = [];
 
         for (var col = 0; col < TOTAL_COLUMNS; col++){
-          var tile = this.board[row][col];
-          rowTiles.push(tile.value);
+          var tile = this._grid[row][col],
+              value = tile ? tile.value : BLANK_TILE_SYMBOL;
+
+          rowTiles.push(value);
         }
 
         rowTiles.push("\n")
@@ -34,17 +37,10 @@
       return output;
     },
 
-    _initBoard: function(){
-      for (var row = 0; row < TOTAL_ROWS; row++) this._initTilesFor(row);
+    _initGrid: function(){
+      this._grid = [];
+      for (var row = 0; row < TOTAL_ROWS; row++) this._grid[row] = [];
     },
-
-    _initTilesFor: function(row){
-      this.board[row] = [];
-
-      for (var col = 0; col < TOTAL_COLUMNS; col++)
-        this.board[row][col] = new App.Tile();
-    }
-
   };
 
 })();
