@@ -1,0 +1,8 @@
+%h1
+  Game
+  %small= @game.uid
+
+%h2 Players
+%ul
+  - @game.players.each do |player|
+    %li= player.name

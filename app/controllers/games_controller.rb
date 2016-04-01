@@ -1,5 +1,9 @@
 class GamesController < ApplicationController
 
+  def show
+    @game = Game.find params[:id]
+  end
+
   def new
     @form = GameForm.new Game.new
   end
@@ -8,7 +12,7 @@ class GamesController < ApplicationController
     @form = GameForm.new Game.new
 
     if @form.validate(params[:game]) && @form.save
-      raise 'yay'
+      redirect_to @form.model
     else
       render :new
     end
