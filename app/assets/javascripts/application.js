@@ -4,7 +4,7 @@
 //= require bootstrap-sprockets
 
 //= require_self
-//= require_tree ./lib
+//= require lib
 //= require_tree .
 
 window.App = window.App || {};

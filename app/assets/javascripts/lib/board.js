@@ -42,7 +42,7 @@
       this.board[row] = [];
 
       for (var col = 0; col < TOTAL_COLUMNS; col++)
-        this.board[row][col] = new Tile();
+        this.board[row][col] = new App.Tile();
     }
 
   };
