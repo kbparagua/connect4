@@ -8,31 +8,19 @@
     this._activeSymbol = null;
     this._toggleSymbol();
 
-    this._dropTo(0);
-    this._dropTo(1);
-
-    this._dropTo(1);
-    this._dropTo(2);
-
-    this._dropTo(2);
-    this._dropTo(3);
-
-    this._dropTo(4);
-    this._dropTo(3);
-
-    this._dropTo(2);
-    this._dropTo(3);
-
-    this._dropTo(3);
-
     console.log( this.board.toString() );
   };
 
   App.Game.prototype = {
 
-    _dropTo: function(column){
+    dropTo: function(column){
       this.board.dropTo(column);
       this._toggleSymbol();
+
+      console.log( this.board.toString() );
+
+      var arbiter = new App.Arbiter(this.board);
+      console.log('has winner? ' + arbiter.hasWinner());
     },
 
     _toggleSymbol: function(){

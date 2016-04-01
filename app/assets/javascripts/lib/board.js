@@ -7,6 +7,9 @@
 
 
   App.Board = function(){
+    this.totalRows = TOTAL_ROWS;
+    this.totalColumns = TOTAL_COLUMNS;
+
     this._initGrid();
     this._activeSymbol = null;
   };
@@ -15,6 +18,14 @@
 
     activateSymbol: function(symbol){
       this._activeSymbol = symbol;
+    },
+
+    isFull: function(){
+      for (var r = 0; r < TOTAL_ROWS; r++)
+        for (var c = 0; c < TOTAL_COLUMNS; c++)
+          if ( !this._grid[r][c] ) return false;
+
+      return true;
     },
 
     dropTo: function(column){
