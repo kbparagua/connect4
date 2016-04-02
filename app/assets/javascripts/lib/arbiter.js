@@ -9,7 +9,7 @@
 
   App.Arbiter = function(board){
     this._scores = [];
-    this._status = null;
+    this._status = ONGOING;
     this._board = board;
   };
 

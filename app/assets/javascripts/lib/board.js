@@ -48,7 +48,7 @@
     },
 
     canDropTo: function(col){
-      return this.arbiter.gameOver() ||
+      return this.arbiter.ongoing() &&
         this.getState('columns')[col].length < App.Board.TOTAL_ROWS;;
     },
 
