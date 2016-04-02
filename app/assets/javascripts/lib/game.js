@@ -13,28 +13,32 @@
 
   App.Game.prototype = {
 
+    reset: function(){
+      this.board.reset();
+      this._toggleSymbol();
+      
+      this.trigger('reset');
+    },
+
     dropTo: function(column){
       this.board.dropTo(column);
       this._toggleSymbol();
-
-      console.log( this.board.toString() );
-      console.log( this._getStatus() );
     },
 
-    _getStatus: function(){
-      var status = null;
-
-      var arbiter = new App.Arbiter(this.board);
-      if ( arbiter.hasWinner(this.board) )
-        status = 'game over';
+    getStatus: function(){
+      if ( this._hasWinner() )
+        return App.GameStatus.GAME_OVER;
 
       else if ( this.board.isFull() )
-        status = 'draw';
+        return App.GameStatus.DRAW;
 
       else
-        status = 'ongoing'
+        return App.GameStatus.ONGOING;
+    },
 
-      return status;
+    _hasWinner: function(){
+      var arbiter = new App.Arbiter(this.board);
+      return arbiter.hasWinner();
     },
 
     _toggleSymbol: function(){
@@ -48,7 +52,7 @@
 
   };
 
+
+  _.extend(App.Game.prototype, Backbone.Events);
+
 })();
-
-
-window.game = new App.Game();

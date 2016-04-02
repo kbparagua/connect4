@@ -16,6 +16,10 @@
 
   App.Board.prototype = {
 
+    reset: function(){
+      this._initGrid();
+    },
+
     activateSymbol: function(symbol){
       this._activeSymbol = symbol;
     },

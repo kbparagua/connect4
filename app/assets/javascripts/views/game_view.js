@@ -4,6 +4,7 @@ App.GameView = Backbone.View.extend({
   template: _.template('<div class="js-board-container board-container"></div>'),
 
   initialize: function(){
+    this.listenTo(this.model, 'reset', this.render);
     this._board = this.model.board;
   },
 
@@ -33,6 +34,34 @@ App.GameView = Backbone.View.extend({
 
   _columnClicked: function(column){
     this.model.dropTo(column);
+
+    switch( this.model.getStatus() ){
+      case App.GameStatus.GAME_OVER:
+        this._gameOver();
+        break;
+
+      case App.GameStatus.DRAW:
+        this._draw();
+        break;
+
+      case App.GameStatus.ONGOING:
+        this._ongoing();
+        break;
+    }
+  },
+
+  _gameOver: function(){
+    alert('Game Over');
+    this.model.reset();
+  },
+
+  _draw: function(){
+    alert('Draw!');
+    this.model.reset();
+  },
+
+  _ongoing: function(){
+    // TODO: Do something
   }
 
 });
