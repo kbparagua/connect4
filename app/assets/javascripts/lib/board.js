@@ -48,6 +48,15 @@
       return this._grid[row][col] || null;
     },
 
+    getColumn: function(col){
+      var cells = [];
+
+      for (var row = 0; row < TOTAL_ROWS; row++)
+        cells.push( this.get(row, col) );
+
+      return cells;
+    },
+
     toString: function(){
       output = '';
 

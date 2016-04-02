@@ -3,8 +3,19 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 
-//= require_self
-//= require lib
-//= require_tree .
+//= require ./underscore-min.js
+//= require ./backbone-min.js
+//= require ./init.js
 
-window.App = window.App || {};
+//= require lib
+//= require views
+
+$(function(){
+
+  var board = new App.Board(),
+      boardView = new App.BoardView({model: board});
+
+  boardView.render();
+  $(document.body).append( boardView.$el );
+
+});
