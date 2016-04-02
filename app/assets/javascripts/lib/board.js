@@ -6,8 +6,7 @@
     var initialState = {
       columns: [],
       pieceCount: 0,
-      activeSymbol: null,
-      lastChangedColumn: null
+      activeSymbol: null
     };
 
     this._history = [initialState];
@@ -65,7 +64,6 @@
       this.state().columns[column].push( this.state().activeSymbol );
 
       this.state().pieceCount++;
-      this.state().lastChangedColumn = column;
     },
 
     undoDrop: function(){
@@ -102,8 +100,7 @@
     _pushNewState: function(){
       var newState = {
         pieceCount: this.state().pieceCount,
-        activeSymbol: this.state().activeSymbol,
-        lastChangedColumn: this.state().lastChangedColumn
+        activeSymbol: this.state().activeSymbol
       };
 
       newState.columns = [];
