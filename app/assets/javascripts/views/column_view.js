@@ -1,10 +1,12 @@
 App.ColumnView = Backbone.View.extend({
 
   className: 'js-column column',
-  events: {'click': 'dropDisc'},
+  events: {'click': '_triggerOnClick'},
 
   initialize: function(options){
+    this._index = options.index;
     this._cells = options.cells;
+    this._onClick = options.onClick;
   },
 
   render: function(){
@@ -30,9 +32,9 @@ App.ColumnView = Backbone.View.extend({
     });
   },
 
-  dropDisc: function(e){
+  _triggerOnClick: function(e){
     e.preventDefault();
-    console.log('Drop!');
+    if (this._onClick) this._onClick(this._index);
   }
 
 });

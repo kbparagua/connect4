@@ -12,10 +12,10 @@
 
 $(function(){
 
-  var board = new App.Board(),
-      boardView = new App.BoardView({model: board});
+  var game = new App.Game(),
+      gameView = new App.GameView({model: game});
 
-  boardView.render();
-  $(document.body).append( boardView.$el );
+  gameView.render();
+  $(document.body).append( gameView.$el );
 
 });

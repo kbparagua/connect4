@@ -34,10 +34,20 @@
     },
 
     _createColumnView: function(col){
-      var cells = this.model.getColumn(col),
-          view = new App.ColumnView({cells: cells});
+      var cells = this.model.getColumn(col);
 
-      return view;
+      return new App.ColumnView({
+        index: col,
+        cells: cells,
+        onClick: this._columnClicked.bind(this)
+      });
+    },
+
+    _columnClicked: function(column){
+      this.model.activateSymbol('A');
+      this.model.dropTo(column);
+
+      console.log( this.model.toString() );
     }
 
   });
