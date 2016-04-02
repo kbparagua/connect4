@@ -3,7 +3,7 @@ App.BoardView = Backbone.View.extend({
   className: 'js-board board',
 
   initialize: function(options){
-    this.listenTo(this.model, 'player:move', this._newDisc);
+    this.listenTo(this.model, 'player:drop', this._newDisc);
     this.listenTo(this.model, 'reset', this.render);
 
     this._columnViews = [];

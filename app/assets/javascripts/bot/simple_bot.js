@@ -9,7 +9,7 @@ App.SimpleBot.prototype = {
 
   playOn: function(board){
     this._playingBoard = board;
-    this._playingBoard.on('player:move', this._respondToPlayerMove.bind(this));
+    this._playingBoard.on('player:drop', this._respondToPlayerMove.bind(this));
   },
 
   _respondToPlayerMove: function(symbol, column){
@@ -36,12 +36,12 @@ App.SimpleBot.prototype = {
     var moves = []
 
     _.each(board.legalColumns(), function(column){
-      board.dropTo(column);
+      board.pushSymbolTo(column);
 
       scores.push( _this.minimax(board, lookahead) );
       moves.push(column);
 
-      board.undoDrop();
+      board.undoState();
     });
 
     if ( board.getState('activeSymbol') !== this._symbol ){

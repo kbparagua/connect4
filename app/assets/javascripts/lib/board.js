@@ -13,7 +13,7 @@
   App.Board.PLAYER_1_SYMBOL = 1;
   App.Board.PLAYER_2_SYMBOL = 2;
 
-  var TOTAL_DISCS = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
+  App.Board.TOTAL_DISCS = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
 
   App.Board.prototype = {
 
@@ -23,6 +23,10 @@
 
     getState: function(key){
       return this._state()[key];
+    },
+
+    undoState: function(){
+      this._history.pop();
     },
 
     reset: function(){
@@ -40,7 +44,7 @@
     },
 
     isFull: function(){
-      return this.getState('droppedDiscs') == TOTAL_DISCS;
+      return this.getState('droppedDiscs') === App.Board.TOTAL_DISCS;
     },
 
     canDropTo: function(col){
@@ -49,13 +53,12 @@
     },
 
     playerDropTo: function(column){
-      this.dropTo(column);
-      this.trigger('player:move', this.getState('activeSymbol'), column);
+      this.pushSymbolTo(column);
+      this.trigger('player:drop', this.getState('activeSymbol'), column);
     },
 
-    dropTo: function(col){
+    pushSymbolTo: function(col){
       this._pushNewState();
-
       this._toggleSymbol();
 
       var column = this.getState('columns')[col],
@@ -63,10 +66,6 @@
 
       column.push( this.getState('activeSymbol') );
       this.setState('droppedDiscs', ++droppedDiscs);
-    },
-
-    undoDrop: function(){
-      this._history.pop();
     },
 
     get: function(row, col){
@@ -77,6 +76,14 @@
     getColumn: function(col){
       return this.getState('columns')[col];
     },
+
+
+
+
+
+    // -------------------------------------------------------------------------
+    // Private Methods
+    // -------------------------------------------------------------------------
 
     _state: function(){
       return this._history[ this._history.length - 1 ];

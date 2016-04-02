@@ -44,7 +44,7 @@
       return this._status === ONGOING;
     },
 
-    _hasWinner: function(){
+    _hasWinner: function(){      
       if ( this._board.getState('droppedDiscs') < MAX_SCORE ) return false;
 
       for (var row = 0; row < App.Board.TOTAL_ROWS; row++)
