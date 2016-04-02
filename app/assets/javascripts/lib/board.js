@@ -29,7 +29,10 @@
     },
 
     reset: function(){
-      this._initColumns();
+      for (var i = this._history.length - 1; i > 0; i--)
+        this._history.pop();
+
+      this.trigger('reset');
     },
 
     legalColumns: function(){

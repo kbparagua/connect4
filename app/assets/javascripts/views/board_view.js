@@ -4,6 +4,8 @@ App.BoardView = Backbone.View.extend({
 
   initialize: function(options){
     this.listenTo(this.model, 'symbol:new', this._newDisc);
+    this.listenTo(this.model, 'reset', this.render);
+
     this._columnViews = [];
   },
 
@@ -49,6 +51,7 @@ App.BoardView = Backbone.View.extend({
 
   _columnClicked: function(column){
     if ( !this.model.canDropTo(column) ) return;
+    if ( this.model.arbiter.gameOver() ) return;
 
     this.model.dropToWithEvent(column);
     this._reactToPlayerMove();
@@ -91,10 +94,12 @@ App.BoardView = Backbone.View.extend({
 
   _gameOver: function(){
     alert('Player ' + this.model.state().activeSymbol + ' wins!');
+    // this.model.reset();
   },
 
   _draw: function(){
     alert("It's a draw!");
+    // this.model.reset();
   }
 
 });
