@@ -1,7 +1,5 @@
 (function(){
 
-  var MAX = 4;
-
   App.Score = function(){
     this.horizontal = 1;
     this.vertical = 1;
@@ -10,18 +8,6 @@
   };
 
   App.Score.prototype = {
-
-    isMaximum: function(){
-      switch(MAX){
-        case this.horizontal:
-        case this.vertical:
-        case this.leftDiagonal:
-        case this.rightDiagonal:
-          return true;
-        default:
-          return false;
-      }
-    },
 
     addHorizontal: createAdderFunction('horizontal'),
     addVertical: createAdderFunction('vertical'),
@@ -32,6 +18,7 @@
 
   function createAdderFunction(direction){
     return function(other){
+      if (!other) return;
       this[direction] += other[direction];
     };
   }
