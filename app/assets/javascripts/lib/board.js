@@ -78,24 +78,6 @@
       return this.getState('columns')[col];
     },
 
-    toString: function(){
-      output = '';
-
-      for (var row = App.Board.TOTAL_ROWS - 1; row >= 0; row--){
-        var rowTiles = [];
-
-        for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++){
-          var value = this.getState('columns')[col][row] || '_';
-          rowTiles.push(value);
-        }
-
-        rowTiles.push("\n")
-        output += rowTiles.join(' ');
-      }
-
-      return output;
-    },
-
     _state: function(){
       return this._history[ this._history.length - 1 ];
     },
