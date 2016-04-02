@@ -33,6 +33,8 @@
     },
 
     dropTo: function(column){
+      if (column >= TOTAL_COLUMNS) return false;
+
       for (var r = 0; r < TOTAL_ROWS; r++){
         var targetCell = this._grid[r][column];
 

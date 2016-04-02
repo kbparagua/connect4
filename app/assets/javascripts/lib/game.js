@@ -21,8 +21,8 @@
     },
 
     dropTo: function(column){
-      this.board.dropTo(column);
-      this._toggleSymbol();
+      var success = this.board.dropTo(column);
+      if (success) this._toggleSymbol();
     },
 
     getStatus: function(){
