@@ -8,13 +8,13 @@
     this._activeSymbol = null;
   };
 
-  App.Board.TOTAL_ROWS = 7;
-  App.Board.TOTAL_COLUMNS = 6;
+  App.Board.TOTAL_ROWS = 6;
+  App.Board.TOTAL_COLUMNS = 7;
 
   App.Board.PLAYER_1_SYMBOL = 1;
   App.Board.PLAYER_2_SYMBOL = 2;
 
-  TOTAL_PIECES = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
+  var TOTAL_PIECES = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
 
   App.Board.prototype = {
 
@@ -23,6 +23,7 @@
     },
 
     isFull: function(){
+      console.log(this._pieceCount + ' == ' + TOTAL_PIECES);
       return this._pieceCount == TOTAL_PIECES;
     },
 

@@ -1,7 +1,5 @@
 (function(){
 
-  var MAX = 4;
-
   App.Score = function(){
     this.horizontal = 1;
     this.vertical = 1;

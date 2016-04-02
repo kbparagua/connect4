@@ -7,7 +7,7 @@ App.ColumnView = Backbone.View.extend({
     this._index = options.index;
 
     this._cellViews = [];
-    this._freeTopRow = App.Board.TOTAL_COLUMNS - 1;
+    this._freeTopRow = App.Board.TOTAL_ROWS - 1;
 
     this._onClick = options.onClick;
   },
@@ -43,7 +43,7 @@ App.ColumnView = Backbone.View.extend({
   _initCellViews: function(){
     var views = [];
 
-    for (var c = 0, n = App.Board.TOTAL_COLUMNS; c < n; c++){
+    for (var r = 0, n = App.Board.TOTAL_ROWS; r < n; r++){
       views.push( new App.CellView() );
     }
 
