@@ -17,6 +17,12 @@
 
   App.Board.prototype = {
 
+    nextSymbol: function(){
+      return this.getState('activeSymbol') === App.Board.PLAYER_1_SYMBOL ?
+        App.Board.PLAYER_2_SYMBOL :
+        App.Board.PLAYER_1_SYMBOL;
+    },
+
     setState: function(key, value){
       this._state()[key] = value;
     },
@@ -114,12 +120,7 @@
     },
 
     _toggleSymbol: function(){
-      var newSymbol =
-        this.getState('activeSymbol') === App.Board.PLAYER_1_SYMBOL ?
-          App.Board.PLAYER_2_SYMBOL :
-          App.Board.PLAYER_1_SYMBOL;
-
-      this.setState('activeSymbol', newSymbol);
+      this.setState('activeSymbol', this.nextSymbol());
     },
 
     _initColumns: function(){

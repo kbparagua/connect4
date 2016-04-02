@@ -19,9 +19,19 @@
       }
     }
 
-    &:hover {
-      cursor: pointer;
-      background: #2ecc71;
-    }
+    border-top: solid 5px transparent;
+    &:hover { cursor: pointer; }
+  }
+}
+
+.board-player-1 {
+  .column:hover {
+    border-color: #e74c3c;
+  }
+}
+
+.board-player-2 {
+  .column:hover {
+    border-color: #f1c40f; 
   }
 }

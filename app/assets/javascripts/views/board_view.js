@@ -1,6 +1,6 @@
 App.BoardView = Backbone.View.extend({
 
-  className: 'js-board board',
+  className: 'js-board board board-player-' + App.Board.PLAYER_1_SYMBOL,
 
   initialize: function(options){
     this.listenTo(this.model, 'player:drop', this._newDisc);
@@ -58,6 +58,8 @@ App.BoardView = Backbone.View.extend({
     if ( !this.model.canDropTo(column) ) return false;
 
     this.model.playerDropTo(column);
+
+    this._toggleClass();
     this._reactToGameOver();
   },
 
@@ -78,6 +80,14 @@ App.BoardView = Backbone.View.extend({
   _draw: function(){
     alert("It's a draw!");
     // this.model.reset();
+  },
+
+  _toggleClass: function(){
+    var lastSymbol = this.model.getState('activeSymbol'),
+        activeSymbol = this.model.nextSymbol();
+
+    this.$el.removeClass('board-player-' + lastSymbol);
+    this.$el.addClass('board-player-' + activeSymbol);
   }
 
 });
