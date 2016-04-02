@@ -73,10 +73,6 @@
       return this.getState('columns')[col][row] || null;
     },
 
-    getColumn: function(col){
-      return this.getState('columns')[col];
-    },
-
 
 
 
