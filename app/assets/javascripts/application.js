@@ -7,6 +7,7 @@
 //= require ./backbone-min.js
 //= require ./init.js
 
+//= require ./bot/simple_bot.js
 //= require lib
 //= require views
 
