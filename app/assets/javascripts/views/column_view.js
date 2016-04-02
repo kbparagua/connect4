@@ -18,9 +18,9 @@ App.ColumnView = Backbone.View.extend({
     return this;
   },
 
-  addDisc: function(row){
+  pushDisc: function(disc){
     var cellView = this._getCellViews()[row];
-    cellView.mark();
+    cellView.occupyWith(disc.value);
   },
 
   _appendCellViews: function(){

@@ -1,24 +1,21 @@
 App.CellView = Backbone.View.extend({
 
   className: 'js-cell cell',
-  template: _.template("<div class='js-slot slot <%- markClass %>'></div>"),
-
-  initialize: function(){
-    this._marked = false;
-  },
+  template: _.template("<div class='js-disc disc <%- discType %>'></div>"),
 
   render: function(){
-    this.$el.html( this.template({markClass: this._markClass()}) );
+    this.$el.html( this.template({discType: this._discTypeClass()}) );
     return this;
   },
 
-  mark: function(){
-    this._marked = true;
+  setModel: function(model){
+    this.model = model;
     this.render();
   },
 
-  _markClass: function(){
-    return this._marked ? 'marked' : '';
+  _discTypeClass: function(){
+    if ( !this.model ) return '';
+    return 'disc-type-' + this.model.value;
   }
 
 

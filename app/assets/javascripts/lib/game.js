@@ -1,7 +1,7 @@
 (function(){
 
-  var PLAYER_1_SYMBOL = 'A',
-      PLAYER_2_SYMBOL = 'B';
+  var PLAYER_1_SYMBOL = 1,
+      PLAYER_2_SYMBOL = 2;
 
   App.Game = function(){
     this.board = new App.Board();
