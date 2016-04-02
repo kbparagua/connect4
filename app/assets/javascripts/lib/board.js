@@ -1,76 +1,61 @@
 (function(){
 
-  var TOTAL_ROWS = 6,
-      TOTAL_COLUMNS = 7;
-
-  var BLANK_TILE_SYMBOL = '_';
-
-
   App.Board = function(){
-    this.totalRows = TOTAL_ROWS;
-    this.totalColumns = TOTAL_COLUMNS;
-
-    this._initGrid();
+    this._initColumns();
     this._activeSymbol = null;
   };
+
+  App.Board.TOTAL_ROWS = 7;
+  App.Board.TOTAL_COLUMNS = 6;
+
+  App.Board.PLAYER_1_SYMBOL = 1;
+  App.Board.PLAYER_2_SYMBOL = 2;
+
 
   App.Board.prototype = {
 
     reset: function(){
-      this._initGrid();
-    },
-
-    activateSymbol: function(symbol){
-      this._activeSymbol = symbol;
+      this._initColumns();
     },
 
     isFull: function(){
-      for (var r = 0; r < TOTAL_ROWS; r++)
-        for (var c = 0; c < TOTAL_COLUMNS; c++)
-          if ( !this._grid[r][c] ) return false;
+      for (var c = 0; c < App.Board.TOTAL_COLUMNS; c++)
+        for (var r = 0; r < App.Board.TOTAL_ROWS; r++)
+          if ( !this._columns[c][r] ) return false;
 
       return true;
     },
 
+    canDropTo: function(column){
+      return this._columns[column].length < App.Board.TOTAL_COLUMNS;
+    },
+
     dropTo: function(column){
-      if (column >= TOTAL_COLUMNS) return false;
+      this._toggleSymbol();
+      this._columns[column].push( this._activeSymbol );
 
-      for (var r = 0; r < TOTAL_ROWS; r++){
-        var targetCell = this._grid[r][column];
+      this.trigger('symbol:new', this._activeSymbol, column);
 
-        if ( targetCell == null ){
-          this._placeDisc(r, column);
-          return true;
-        }
-      }
-
-      return false;
+      return true;
     },
 
     get: function(row, col){
-      if ( !this._grid[row] ) return null;
-      return this._grid[row][col] || null;
+      if ( !this._columns[col] ) return null;
+      return this._columns[col][row] || null;
     },
 
     getColumn: function(col){
-      var cells = [];
-
-      for (var row = 0; row < TOTAL_ROWS; row++)
-        cells.push( this.get(row, col) );
-
-      return cells;
+      return this._columns[col];
     },
 
     toString: function(){
       output = '';
 
-      for (var row = TOTAL_ROWS - 1; row >= 0; row--){
+      for (var row = App.Board.TOTAL_ROWS - 1; row >= 0; row--){
         var rowTiles = [];
 
-        for (var col = 0; col < TOTAL_COLUMNS; col++){
-          var tile = this._grid[row][col],
-              value = tile ? tile.value : BLANK_TILE_SYMBOL;
-
+        for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++){
+          var value = this._columns[col][row] || '_';
           rowTiles.push(value);
         }
 
@@ -81,17 +66,20 @@
       return output;
     },
 
-    _placeDisc: function(row, col){
-      var disc = new App.Disc(this._activeSymbol);
-      this._grid[row][col] = disc;
-
-      this.trigger('disc:new', disc, col);
+    _toggleSymbol: function(){
+      this._activeSymbol =
+        this._activeSymbol === App.Board.PLAYER_1_SYMBOL ?
+          App.Board.PLAYER_2_SYMBOL :
+          App.Board.PLAYER_1_SYMBOL;
     },
 
-    _initGrid: function(){
-      this._grid = [];
-      for (var row = 0; row < TOTAL_ROWS; row++) this._grid[row] = [];
-    },
+    _initColumns: function(){
+      this._columns = [];
+
+      for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
+        this._columns[col] = [];
+    }
+
   };
 
   _.extend(App.Board.prototype, Backbone.Events);

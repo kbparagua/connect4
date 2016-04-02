@@ -6,9 +6,8 @@ App.ColumnView = Backbone.View.extend({
   initialize: function(options){
     this._index = options.index;
 
-    this._cells = options.cells;
     this._cellViews = [];
-    this._freeTopRow = this._cells.length - 1;
+    this._freeTopRow = App.Board.TOTAL_COLUMNS - 1;
 
     this._onClick = options.onClick;
   },
@@ -22,9 +21,9 @@ App.ColumnView = Backbone.View.extend({
     return this;
   },
 
-  push: function(disc){
+  push: function(symbol){
     var cellView = this._freeTopCell();
-    cellView.setModel(disc);
+    cellView.setType(symbol);
 
     this._freeTopRow--;
   },
@@ -42,9 +41,13 @@ App.ColumnView = Backbone.View.extend({
   },
 
   _initCellViews: function(){
-    return _.map(this._cells, function(cell){
-      return new App.CellView({model: cell});
-    });
+    var views = [];
+
+    for (var c = 0, n = App.Board.TOTAL_COLUMNS; c < n; c++){
+      views.push( new App.CellView() );
+    }
+
+    return views;
   },
 
   _triggerOnClick: function(e){
