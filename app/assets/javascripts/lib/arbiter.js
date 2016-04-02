@@ -16,6 +16,8 @@
   App.Arbiter.prototype = {
 
     checkStatus: function(){
+      this._scores = [];
+
       if ( this._hasWinner() )
         this._status = HAS_WINNER;
 
@@ -43,6 +45,8 @@
     },
 
     _hasWinner: function(){
+      if ( this._board.state().pieceCount < MAX_SCORE ) return false;
+
       for (var row = 0; row < App.Board.TOTAL_ROWS; row++)
         for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
           if ( this._discWins(row, col) ) return true;
