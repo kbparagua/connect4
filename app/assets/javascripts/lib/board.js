@@ -49,6 +49,11 @@
       return this.state().columns[column].length < App.Board.TOTAL_ROWS;;
     },
 
+    dropToWithEvent: function(column){
+      this.dropTo(column);
+      this.trigger('symbol:new', this.state().activeSymbol, column);
+    },
+
     dropTo: function(column){
       this._pushNewState();
 
@@ -57,10 +62,6 @@
 
       this.state().pieceCount++;
       this.state().lastChangedColumn = column;
-
-      this.trigger('symbol:new', this.state().activeSymbol, column);
-
-      return true;
     },
 
     undoDrop: function(){
@@ -101,7 +102,10 @@
         lastChangedColumn: this.state().lastChangedColumn
       };
 
-      newState.columns = _.clone( this.state().columns );
+      newState.columns = [];
+      _.each(this.state().columns, function(column){
+        newState.columns.push( _.clone(column) )
+      });
 
       this._history.push(newState);
     },
