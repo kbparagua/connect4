@@ -3,14 +3,7 @@
   App.Board = function(){
     this.arbiter = new App.Arbiter(this);
 
-    var initialState = {
-      columns: [],
-      pieceCount: 0,
-      activeSymbol: null,
-      lastChangedColumn: null
-    };
-
-    this._history = [initialState];
+    this._history = [this._initialState()];
     this._initColumns();
   };
 
@@ -20,18 +13,24 @@
   App.Board.PLAYER_1_SYMBOL = 1;
   App.Board.PLAYER_2_SYMBOL = 2;
 
-  var TOTAL_PIECES = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
+  App.Board.TOTAL_DISCS = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
 
   App.Board.prototype = {
 
-    state: function(){
-      return this._history[ this._history.length - 1 ];
+    setState: function(key, value){
+      this._state()[key] = value;
+    },
+
+    getState: function(key){
+      return this._state()[key];
+    },
+
+    undoState: function(){
+      this._history.pop();
     },
 
     reset: function(){
-      for (var i = this._history.length - 1; i > 0; i--)
-        this._history.pop();
-
+      this._history = [this._initialState()];
       this.trigger('reset');
     },
 
@@ -45,68 +44,69 @@
     },
 
     isFull: function(){
-      return this.state().pieceCount == TOTAL_PIECES;
+      return this.getState('droppedDiscs') === App.Board.TOTAL_DISCS;
     },
 
-    canDropTo: function(column){
-      return this.state().columns[column].length < App.Board.TOTAL_ROWS;;
+    canDropTo: function(col){
+      return this.arbiter.ongoing() &&
+        this.getState('columns')[col].length < App.Board.TOTAL_ROWS;;
     },
 
-    dropToWithEvent: function(column){
-      this.dropTo(column);
-      this.trigger('symbol:new', this.state().activeSymbol, column);
+    playerDropTo: function(column){
+      this.pushSymbolTo(column);
+      this.arbiter.checkStatus();
+
+      this.trigger('player:drop', this.getState('activeSymbol'), column);
     },
 
-    dropTo: function(column){
+    pushSymbolTo: function(col){
       this._pushNewState();
-
       this._toggleSymbol();
-      this.state().columns[column].push( this.state().activeSymbol );
 
-      this.state().pieceCount++;
-      this.state().lastChangedColumn = column;
-    },
+      var column = this.getState('columns')[col],
+          droppedDiscs = this.getState('droppedDiscs');
 
-    undoDrop: function(){
-      this._history.pop();
+      column.push( this.getState('activeSymbol') );
+
+      this.setState('droppedDiscs', ++droppedDiscs);
+      this.setState('lastChangedColumn', col);
     },
 
     get: function(row, col){
-      if ( !this.state().columns[col] ) return null;
-      return this.state().columns[col][row] || null;
+      if ( !this.getState('columns')[col] ) return null;
+      return this.getState('columns')[col][row] || null;
     },
 
-    getColumn: function(col){
-      return this.state().columns[col];
+
+
+
+
+    // -------------------------------------------------------------------------
+    // Private Methods
+    // -------------------------------------------------------------------------
+
+    _state: function(){
+      return this._history[ this._history.length - 1 ];
     },
 
-    toString: function(){
-      output = '';
-
-      for (var row = App.Board.TOTAL_ROWS - 1; row >= 0; row--){
-        var rowTiles = [];
-
-        for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++){
-          var value = this.state().columns[col][row] || '_';
-          rowTiles.push(value);
-        }
-
-        rowTiles.push("\n")
-        output += rowTiles.join(' ');
-      }
-
-      return output;
+    _initialState: function(){
+      return {
+        columns: [],
+        activeSymbol: null,
+        droppedDiscs: 0,
+        lastChangedColumn: null
+      };
     },
 
     _pushNewState: function(){
       var newState = {
-        pieceCount: this.state().pieceCount,
-        activeSymbol: this.state().activeSymbol,
-        lastChangedColumn: this.state().lastChangedColumn
+        droppedDiscs: this.getState('droppedDiscs'),
+        activeSymbol: this.getState('activeSymbol'),
+        lastChangedColumn: this.getState('lastChangedColumn'),
+        columns: []
       };
 
-      newState.columns = [];
-      _.each(this.state().columns, function(column){
+      _.each(this.getState('columns'), function(column){
         newState.columns.push( _.clone(column) )
       });
 
@@ -114,17 +114,17 @@
     },
 
     _toggleSymbol: function(){
-      this.state().activeSymbol =
-        this.state().activeSymbol === App.Board.PLAYER_1_SYMBOL ?
+      var newSymbol =
+        this.getState('activeSymbol') === App.Board.PLAYER_1_SYMBOL ?
           App.Board.PLAYER_2_SYMBOL :
           App.Board.PLAYER_1_SYMBOL;
+
+      this.setState('activeSymbol', newSymbol);
     },
 
     _initColumns: function(){
-      this.state().columns = [];
-
       for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
-        this.state().columns[col] = [];
+        this.getState('columns')[col] = [];
     }
 
   };

@@ -9,6 +9,18 @@
 
   App.Score.prototype = {
 
+    reached: function(number){
+      switch (number){
+        case this.horizontal:
+        case this.vertical:
+        case this.leftDiagonal:
+        case this.rightDiagonal:
+          return true;
+        default:
+          return false;
+      }
+    },
+
     addHorizontal: createAdderFunction('horizontal'),
     addVertical: createAdderFunction('vertical'),
     addLeftDiagonal: createAdderFunction('leftDiagonal'),
@@ -18,7 +30,6 @@
 
   function createAdderFunction(direction){
     return function(other){
-      if (!other) return;
       this[direction] += other[direction];
     };
   }

@@ -3,7 +3,7 @@ App.BoardView = Backbone.View.extend({
   className: 'js-board board',
 
   initialize: function(options){
-    this.listenTo(this.model, 'symbol:new', this._newDisc);
+    this.listenTo(this.model, 'player:drop', this._newDisc);
     this.listenTo(this.model, 'reset', this.render);
 
     this._columnViews = [];
@@ -49,51 +49,29 @@ App.BoardView = Backbone.View.extend({
     });
   },
 
-  _columnClicked: function(column){
-    if ( !this.model.canDropTo(column) ) return;
-    if ( this.model.arbiter.gameOver() ) return;
-
-    this.model.dropToWithEvent(column);
-    this._reactToPlayerMove();
-  },
-
   _newDisc: function(symbol, column){
     var columnView = this._columnViews[column];
     columnView.push(symbol);
   },
 
-  _reactToPlayerMove: function(){
-    var arbiter = this.model.arbiter;
-    arbiter.checkStatus();
+  _columnClicked: function(column){
+    if ( !this.model.canDropTo(column) ) return false;
 
-    if ( arbiter.hasWinner() ) this._gameOver();
-    else if ( arbiter.draw() ) this._draw();
-    else this._ongoing();
+    this.model.playerDropTo(column);
+    this._reactToGameOver();
   },
 
-  _reactToBotMove: function(){
+  _reactToGameOver: function(){
     var arbiter = this.model.arbiter;
-    arbiter.checkStatus();
 
     if ( arbiter.hasWinner() ) this._gameOver();
     else if ( arbiter.draw() ) this._draw();
   },
 
-  _ongoing: function(){
-    var bot = new App.SimpleBot( App.Board.PLAYER_2_SYMBOL );
-    var score = bot.minimax(this.model);
-
-    console.log( this.model.state() );
-
-    console.log('Drop To: ' + bot._bestMove);
-    console.log('Score: ' + score);
-
-    this.model.dropToWithEvent(bot._bestMove);
-    this._reactToBotMove();
-  },
+  _ongoing: function(){},
 
   _gameOver: function(){
-    alert('Player ' + this.model.state().activeSymbol + ' wins!');
+    alert('Player ' + this.model.getState('activeSymbol') + ' wins!');
     // this.model.reset();
   },
 
