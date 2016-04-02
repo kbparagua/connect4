@@ -48,12 +48,34 @@ App.BoardView = Backbone.View.extend({
   },
 
   _columnClicked: function(column){
-    if ( this.model.canDropTo(column) ) this.model.dropTo(column);
+    if ( !this.model.canDropTo(column) ) return;
+
+    this.model.dropTo(column);
+    this._reactToStatus();
   },
 
   _newDisc: function(symbol, column){
     var columnView = this._columnViews[column];
     columnView.push(symbol);
+  },
+
+  _reactToStatus: function(){
+    var arbiter = this.model.arbiter;
+    arbiter.checkStatus();
+
+    if ( arbiter.hasWinner() ) this._gameOver();
+    else if ( arbiter.draw() ) this._draw();
+    else this._ongoing();
+  },
+
+  _ongoing: function(){},
+
+  _gameOver: function(){
+    alert('Player ' + this.model._activeSymbol + ' wins!');
+  },
+
+  _draw: function(){
+    alert("It's a draw!");
   }
 
 });

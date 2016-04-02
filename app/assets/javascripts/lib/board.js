@@ -1,7 +1,10 @@
 (function(){
 
   App.Board = function(){
+    this.arbiter = new App.Arbiter(this);
+
     this._initColumns();
+    this._pieceCount = 0;
     this._activeSymbol = null;
   };
 
@@ -11,6 +14,7 @@
   App.Board.PLAYER_1_SYMBOL = 1;
   App.Board.PLAYER_2_SYMBOL = 2;
 
+  TOTAL_PIECES = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
 
   App.Board.prototype = {
 
@@ -19,11 +23,7 @@
     },
 
     isFull: function(){
-      for (var c = 0; c < App.Board.TOTAL_COLUMNS; c++)
-        for (var r = 0; r < App.Board.TOTAL_ROWS; r++)
-          if ( !this._columns[c][r] ) return false;
-
-      return true;
+      return this._pieceCount == TOTAL_PIECES;
     },
 
     canDropTo: function(column){
@@ -33,6 +33,8 @@
     dropTo: function(column){
       this._toggleSymbol();
       this._columns[column].push( this._activeSymbol );
+
+      this._pieceCount++;
 
       this.trigger('symbol:new', this._activeSymbol, column);
 

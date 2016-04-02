@@ -1,15 +1,50 @@
 (function(){
 
+  var MAX_SCORE = 4;
+
+  var ONGOING = 0,
+      HAS_WINNER = 1,
+      DRAW = 2;
+
   App.Arbiter = function(board){
     this._scores = [];
+    this._status = null;
     this._board = board;
   };
 
+
   App.Arbiter.prototype = {
 
+    checkStatus: function(){
+      if ( this._hasWinner() )
+        this._status = HAS_WINNER;
+
+      else if ( this._board.isFull() )
+        this._status = DRAW;
+
+      else
+        this._status = ONGOING;
+    },
+
+    gameOver: function(){
+      return this.hasWinner() || this.draw();
+    },
+
     hasWinner: function(){
-      for (var row = 0; row < this._board.totalRows; row++)
-        for (var col = 0; col < this._board.totalColumns; col++)
+      return this._status === HAS_WINNER;
+    },
+
+    draw: function(){
+      return this._status === DRAW;
+    },
+
+    ongoing: function(){
+      return this._status === ONGOING;
+    },
+
+    _hasWinner: function(){
+      for (var row = 0; row < App.Board.TOTAL_ROWS; row++)
+        for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
           if ( this._discWins(row, col) ) return true;
 
       return false;
@@ -17,14 +52,14 @@
 
     _discWins: function(row, col){
       var score = this._computeDiscScore(row, col);
-  
-      return score.isMaximum();
+      return this._reachedMax(score);
     },
 
     _computeDiscScore: function(row, col){
       var value = this._board.get(row, col),
           score = new App.Score();
 
+      this._scores[row] = this._scores[row] || [];
       this._scores[row][col] = score;
 
       if (!value) return score;
@@ -46,13 +81,23 @@
       if ( value === lowerRight )
         score.addRightDiagonal( this._getScore(row - 1, col + 1) );
 
-      this._scores[row][col] = score;
-
       return score;
     },
 
     _getScore: function(row, col){
       if ( this._scores[row] ) return this._scores[row][col];
+    },
+
+    _reachedMax: function(score){
+      switch(MAX_SCORE){
+          case score.horizontal:
+          case score.vertical:
+          case score.leftDiagonal:
+          case score.rightDiagonal:
+            return true;
+          default:
+            return false;
+      }
     }
 
   };

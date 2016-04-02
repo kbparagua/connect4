@@ -11,18 +11,6 @@
 
   App.Score.prototype = {
 
-    isMaximum: function(){
-      switch(MAX){
-        case this.horizontal:
-        case this.vertical:
-        case this.leftDiagonal:
-        case this.rightDiagonal:
-          return true;
-        default:
-          return false;
-      }
-    },
-
     addHorizontal: createAdderFunction('horizontal'),
     addVertical: createAdderFunction('vertical'),
     addLeftDiagonal: createAdderFunction('leftDiagonal'),
