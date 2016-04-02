@@ -3,15 +3,15 @@
   App.Board = function(){
     this.arbiter = new App.Arbiter(this);
 
-    this._state = {
+    var initialState = {
       columns: [],
       pieceCount: 0,
-      activeSymbol: null
+      activeSymbol: null,
+      lastChangedColumn: null
     };
 
+    this._history = [initialState];
     this._initColumns();
-    this._pieceCount = 0;
-    this._activeSymbol = null;
   };
 
   App.Board.TOTAL_ROWS = 6;
@@ -24,36 +24,56 @@
 
   App.Board.prototype = {
 
+    state: function(){
+      return this._history[ this._history.length - 1 ];
+    },
+
     reset: function(){
       this._initColumns();
     },
 
+    legalColumns: function(){
+      var columns = [];
+
+      for (var c = 0; c < App.Board.TOTAL_COLUMNS; c++)
+        if ( this.canDropTo(c) ) columns.push(c);
+
+      return columns;
+    },
+
     isFull: function(){
-      return this._pieceCount == TOTAL_PIECES;
+      return this.state().pieceCount == TOTAL_PIECES;
     },
 
     canDropTo: function(column){
-      return this._columns[column].length < App.Board.TOTAL_ROWS;;
+      return this.state().columns[column].length < App.Board.TOTAL_ROWS;;
     },
 
     dropTo: function(column){
+      this._pushNewState();
+
       this._toggleSymbol();
-      this._columns[column].push( this._activeSymbol );
+      this.state().columns[column].push( this.state().activeSymbol );
 
-      this._pieceCount++;
+      this.state().pieceCount++;
+      this.state().lastChangedColumn = column;
 
-      this.trigger('symbol:new', this._activeSymbol, column);
+      this.trigger('symbol:new', this.state().activeSymbol, column);
 
       return true;
     },
 
+    undoDrop: function(){
+      this._history.pop();
+    },
+
     get: function(row, col){
-      if ( !this._columns[col] ) return null;
-      return this._columns[col][row] || null;
+      if ( !this.state().columns[col] ) return null;
+      return this.state().columns[col][row] || null;
     },
 
     getColumn: function(col){
-      return this._columns[col];
+      return this.state().columns[col];
     },
 
     toString: function(){
@@ -63,7 +83,7 @@
         var rowTiles = [];
 
         for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++){
-          var value = this._columns[col][row] || '_';
+          var value = this.state().columns[col][row] || '_';
           rowTiles.push(value);
         }
 
@@ -74,18 +94,30 @@
       return output;
     },
 
+    _pushNewState: function(){
+      var newState = {
+        pieceCount: this.state().pieceCount,
+        activeSymbol: this.state().activeSymbol,
+        lastChangedColumn: this.state().lastChangedColumn
+      };
+
+      newState.columns = _.clone( this.state().columns );
+
+      this._history.push(newState);
+    },
+
     _toggleSymbol: function(){
-      this._activeSymbol =
-        this._activeSymbol === App.Board.PLAYER_1_SYMBOL ?
+      this.state().activeSymbol =
+        this.state().activeSymbol === App.Board.PLAYER_1_SYMBOL ?
           App.Board.PLAYER_2_SYMBOL :
           App.Board.PLAYER_1_SYMBOL;
     },
 
     _initColumns: function(){
-      this._columns = [];
+      this.state().columns = [];
 
       for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
-        this._columns[col] = [];
+        this.state().columns[col] = [];
     }
 
   };

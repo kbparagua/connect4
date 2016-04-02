@@ -71,7 +71,7 @@ App.BoardView = Backbone.View.extend({
   _ongoing: function(){},
 
   _gameOver: function(){
-    alert('Player ' + this.model._activeSymbol + ' wins!');
+    alert('Player ' + this.model.state().activeSymbol + ' wins!');
   },
 
   _draw: function(){
