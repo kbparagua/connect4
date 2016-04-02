@@ -1,70 +1,92 @@
-App.SimpleBot = function(symbol){
-  this._playingBoard = null;
-  this._symbol = symbol;
-  this._bestMove = null;
-  this._defaultLookahead = 5;
-};
+(function(){
 
-App.SimpleBot.prototype = {
+  var DEFAULT_LOOKAHEAD = 6;
 
-  playOn: function(board){
-    this._playingBoard = board;
-    this._playingBoard.on('player:drop', this._respondToPlayerMove.bind(this));
-  },
+  App.SimpleBot = function(symbol){
+    this._playingBoard = null;
+    this._symbol = symbol;
+  };
 
-  _respondToPlayerMove: function(symbol, column){
-    // Do not respond to own move.
-    if (this._symbol === symbol) return;
+  App.SimpleBot.prototype = {
 
-    var score = this.minimax(this._playingBoard);
-    this._playingBoard.playerDropTo(this._bestMove);
-  },
+    playOn: function(board){
+      this._playingBoard = board;
+      this._playingBoard.on('player:drop', this._respondToPlayerMove.bind(this));
+    },
 
-  minimax: function(board, desiredLookahead){
-    var _this = this,
-        arbiter = board.arbiter;
+    _respondToPlayerMove: function(symbol, column){
+      // Do not respond to own move.
+      if (this._symbol === symbol) return;
 
-    var lookahead =
-      desiredLookahead != null ? desiredLookahead : this._defaultLookahead;
+      // Do not respond when game is over.
+      if ( this._playingBoard.arbiter.gameOver() ) return;
 
-    arbiter.checkStatus();
+      var bestMove = this._bestMove(this._playingBoard);
+      this._playingBoard.playerDropTo( bestMove.column );
+    },
 
-    if ( lookahead == 0 || arbiter.gameOver() ) return this._getScore(board);
-    lookahead--;
+    _bestMove: function(board, desiredLookahead){
+      if (desiredLookahead === 0) return this._finalMove(board);
 
-    var scores = []
-    var moves = []
+      var arbiter = board.arbiter,
+          lookahead = desiredLookahead || DEFAULT_LOOKAHEAD;
 
-    _.each(board.legalColumns(), function(column){
-      board.pushSymbolTo(column);
+      arbiter.checkStatus();
+      if ( arbiter.gameOver() ) return this._finalMove(board);
 
-      scores.push( _this.minimax(board, lookahead) );
-      moves.push(column);
+      --lookahead;
+      var moves = this._nextMoves(board, lookahead);
 
-      board.undoState();
-    });
+      return this._myTurn ?
+        this._getMinScoreMove(moves) :
+        this._getMaxScoreMove(moves);
+    },
 
-    if ( board.getState('activeSymbol') !== this._symbol ){
-      var highScore = _.max(scores);
-      this._bestMove = moves[ scores.indexOf(highScore) ];
+    _myTurn: function(board){
+      return board.getState('activeSymbol') === this._symbol;
+    },
 
-      return highScore;
+    _getMaxScoreMove: function(moves){
+      var choice = {score: 0};
+
+      _.each(moves, function(move){
+        if (choice.score <= move.score) choice = move;
+      });
+
+      return choice;
+    },
+
+    _getMinScoreMove: function(moves){
+      var choice = {score: 0};
+
+      _.each(moves, function(move){
+        if (choice.score >= move.score) choice = move;
+      });
+
+      return choice;
+    },
+
+    _nextMoves: function(board, lookahead){
+      var _this = this;
+
+      return _.map(board.legalColumns(), function(column){
+        board.pushSymbolTo(column);
+        var bestMove = _this._bestMove(board, lookahead);
+        board.undoState();
+
+        return {column: column, score: bestMove.score};
+      });
+    },
+
+    _finalMove: function(board){
+      var score = 0;
+
+      if ( board.arbiter.gameOver() )
+        score = this._myTurn(board) ? 10 : -10;
+
+      return {score: score, column: board.getState('lastChangedColumn')};
     }
-    else {
-      var lowScore = _.min(scores);
-      this._bestMove = moves[ scores.indexOf(lowScore) ];
 
-      return lowScore;
-    }
-  },
+  };
 
-  _getScore: function(board){
-    if ( board.arbiter.ongoing() || board.arbiter.draw() ) return 0;
-
-    if ( board.getState('activeSymbol') === this._symbol )
-      return 10;
-    else
-      return -10;
-  }
-
-};
+})();

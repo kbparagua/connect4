@@ -63,15 +63,6 @@ App.BoardView = Backbone.View.extend({
 
   _reactToGameOver: function(){
     var arbiter = this.model.arbiter;
-    arbiter.checkStatus();
-
-    if ( arbiter.hasWinner() ) this._gameOver();
-    else if ( arbiter.draw() ) this._draw();
-  },
-
-  _reactToBotMove: function(){
-    var arbiter = this.model.arbiter;
-    arbiter.checkStatus();
 
     if ( arbiter.hasWinner() ) this._gameOver();
     else if ( arbiter.draw() ) this._draw();

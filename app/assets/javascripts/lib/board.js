@@ -54,6 +54,8 @@
 
     playerDropTo: function(column){
       this.pushSymbolTo(column);
+      this.arbiter.checkStatus();
+
       this.trigger('player:drop', this.getState('activeSymbol'), column);
     },
 
@@ -65,7 +67,9 @@
           droppedDiscs = this.getState('droppedDiscs');
 
       column.push( this.getState('activeSymbol') );
+
       this.setState('droppedDiscs', ++droppedDiscs);
+      this.setState('lastChangedColumn', col);
     },
 
     get: function(row, col){
@@ -89,7 +93,8 @@
       return {
         columns: [],
         activeSymbol: null,
-        droppedDiscs: 0
+        droppedDiscs: 0,
+        lastChangedColumn: null
       };
     },
 
@@ -97,6 +102,7 @@
       var newState = {
         droppedDiscs: this.getState('droppedDiscs'),
         activeSymbol: this.getState('activeSymbol'),
+        lastChangedColumn: this.getState('lastChangedColumn'),
         columns: []
       };
 
