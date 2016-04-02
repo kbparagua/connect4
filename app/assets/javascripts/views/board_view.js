@@ -10,6 +10,8 @@ App.BoardView = Backbone.View.extend({
 
   render: function(){
     this.$el.html('');
+
+    this._columnViews = this._getColumnViews();
     this._appendColumnViews();
 
     return this;
@@ -17,22 +19,20 @@ App.BoardView = Backbone.View.extend({
 
   _appendColumnViews: function(){
     for (var i = 0, n = this._getColumnViews().length; i < n; i++){
-      var column = this._getColumnViews()[i];
+      var view = this._columnViews[i];
 
-      column.render();
-      this.$el.append( column.$el );
+      view.render();
+      this.$el.append( view.$el );
     }
   },
 
   _getColumnViews: function(){
-    if (this._columnViews.length) return this._columnViews;
+    var views = [];
 
-    for (var c = 0; c < this.model.totalColumns; c++){
-      var view = this._createColumnView(c);
-      this._columnViews.push(view);
-    }
+    for (var c = 0; c < this.model.totalColumns; c++)
+      views.push( this._createColumnView(c) );
 
-    return this._columnViews;
+    return views;
   },
 
   _createColumnView: function(col){
@@ -50,7 +50,7 @@ App.BoardView = Backbone.View.extend({
   },
 
   _newDisc: function(disc, column){
-    var columnView = this._getColumnViews()[column];
+    var columnView = this._columnViews[column];
     columnView.push(disc);
   }
 
