@@ -22,6 +22,7 @@
       if ( this._playingBoard.arbiter.gameOver() ) return;
 
       var bestMove = this._bestMove(this._playingBoard);
+
       this._playingBoard.playerDropTo( bestMove.column );
     },
 
@@ -34,10 +35,10 @@
       arbiter.checkStatus();
       if ( arbiter.gameOver() ) return this._finalMove(board);
 
-      --lookahead;
+      lookahead--;
       var moves = this._nextMoves(board, lookahead);
 
-      return this._myTurn ?
+      return this._myTurn(board) ?
         this._getMinScoreMove(moves) :
         this._getMaxScoreMove(moves);
     },
@@ -47,20 +48,20 @@
     },
 
     _getMaxScoreMove: function(moves){
-      var choice = {score: 0};
+      var choice = null;
 
       _.each(moves, function(move){
-        if (choice.score <= move.score) choice = move;
+        if (!choice || choice.score <= move.score) choice = move;
       });
 
       return choice;
     },
 
     _getMinScoreMove: function(moves){
-      var choice = {score: 0};
+      var choice = null;
 
       _.each(moves, function(move){
-        if (choice.score >= move.score) choice = move;
+        if (!choice || choice.score >= move.score) choice = move;
       });
 
       return choice;
