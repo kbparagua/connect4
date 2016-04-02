@@ -49,13 +49,9 @@ App.BoardView = Backbone.View.extend({
     if (this._onColumnClick) this._onColumnClick(column);
   },
 
-  _newDisc: function(disc, position){
-    var columnView = this._getColumnViews()[position.col];
-
-    var maxRow = this.model.totalRows - 1,
-        invertedRow = maxRow - position.row;
-
-    columnView.addDisc(invertedRow);
+  _newDisc: function(disc, column){
+    var columnView = this._getColumnViews()[column];
+    columnView.push(disc);
   }
 
 });

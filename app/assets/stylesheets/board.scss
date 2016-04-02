@@ -15,8 +15,8 @@
         height: 100%;
         border-radius: 50%;
 
-        &.occupied-by-player-1 { background: red; }
-        &.occupied-by-player-2 { background: yellow; }
+        &.disc-type-1 { background: red; }
+        &.disc-type-2 { background: yellow; }
       }
     }
 

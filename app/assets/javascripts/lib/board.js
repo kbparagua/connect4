@@ -79,7 +79,7 @@
       var disc = new App.Disc(this._activeSymbol);
       this._grid[row][col] = disc;
 
-      this.trigger('disc:new', disc, {row: row, col: col});
+      this.trigger('disc:new', disc, col);
     },
 
     _initGrid: function(){

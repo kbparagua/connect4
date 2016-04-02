@@ -18,6 +18,4 @@ App.CellView = Backbone.View.extend({
     return 'disc-type-' + this.model.value;
   }
 
-
-
 });
