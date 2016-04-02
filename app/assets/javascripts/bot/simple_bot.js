@@ -44,7 +44,7 @@ App.SimpleBot.prototype = {
       board.undoDrop();
     });
 
-    if ( board.state().activeSymbol != this._symbol ){
+    if ( board.getState('activeSymbol') !== this._symbol ){
       var highScore = _.max(scores);
       this._bestMove = moves[ scores.indexOf(highScore) ];
 
@@ -61,7 +61,7 @@ App.SimpleBot.prototype = {
   _getScore: function(board){
     if ( board.arbiter.ongoing() || board.arbiter.draw() ) return 0;
 
-    if ( board.state().activeSymbol == this._symbol )
+    if ( board.getState('activeSymbol') === this._symbol )
       return 10;
     else
       return -10;

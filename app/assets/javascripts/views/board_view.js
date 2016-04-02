@@ -80,7 +80,7 @@ App.BoardView = Backbone.View.extend({
   _ongoing: function(){},
 
   _gameOver: function(){
-    alert('Player ' + this.model.state().activeSymbol + ' wins!');
+    alert('Player ' + this.model.getState('activeSymbol') + ' wins!');
     // this.model.reset();
   },
 

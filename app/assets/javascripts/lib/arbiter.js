@@ -45,7 +45,7 @@
     },
 
     _hasWinner: function(){
-      if ( this._board.state().pieceCount < MAX_SCORE ) return false;
+      if ( this._board.getState('droppedDiscs') < MAX_SCORE ) return false;
 
       for (var row = 0; row < App.Board.TOTAL_ROWS; row++)
         for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
