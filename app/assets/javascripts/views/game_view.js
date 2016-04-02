@@ -6,9 +6,12 @@ App.GameView = Backbone.View.extend({
   initialize: function(){
     this.listenTo(this.model, 'reset', this.render);
     this._board = this.model.board;
+    this._boardView = null;
   },
 
   render: function(){
+    if (this._boardView) this._boardView.remove();
+
     this.$el.html( this.template() );
     this._appendBoardView();
 
@@ -16,10 +19,10 @@ App.GameView = Backbone.View.extend({
   },
 
   _appendBoardView: function(){
-    var boardView = this._createBoardView();
-    boardView.render();
+    this._boardView = this._createBoardView();
+    this._boardView.render();
 
-    this.$('.js-board-container:first').append( boardView.$el );
+    this.$('.js-board-container:first').append( this._boardView.$el );
   },
 
   _createBoardView: function(){

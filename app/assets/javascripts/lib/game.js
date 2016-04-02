@@ -16,7 +16,7 @@
     reset: function(){
       this.board.reset();
       this._toggleSymbol();
-      
+
       this.trigger('reset');
     },
 
