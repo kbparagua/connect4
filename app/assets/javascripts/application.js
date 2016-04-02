@@ -3,8 +3,19 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 
-//= require_self
-//= require lib
-//= require_tree .
+//= require ./underscore-min.js
+//= require ./backbone-min.js
+//= require ./init.js
 
-window.App = window.App || {};
+//= require lib
+//= require views
+
+$(function(){
+
+  var game = new App.Game(),
+      gameView = new App.GameView({model: game});
+
+  gameView.render();
+  $(document.body).append( gameView.$el );
+
+});

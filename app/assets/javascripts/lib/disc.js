@@ -9,7 +9,6 @@
     equalTo: function(other){
       if (!other) return false;
       return this.value == other.value;
-
     }
   };
 
