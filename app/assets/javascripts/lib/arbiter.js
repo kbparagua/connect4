@@ -6,6 +6,7 @@
       HAS_WINNER = 1,
       DRAW = 2;
 
+
   App.Arbiter = function(board){
     this._scores = [];
     this._status = null;
@@ -16,8 +17,6 @@
   App.Arbiter.prototype = {
 
     checkStatus: function(){
-      this._scores = [];
-
       if ( this._hasWinner() )
         this._status = HAS_WINNER;
 
@@ -44,8 +43,18 @@
       return this._status === ONGOING;
     },
 
+
+
+
+
+    // -------------------------------------------------------------------------
+    // Private Methods
+    // -------------------------------------------------------------------------
+
     _hasWinner: function(){
       if ( this._board.getState('droppedDiscs') < MAX_SCORE ) return false;
+
+      this._scores = [];
 
       for (var row = 0; row < App.Board.TOTAL_ROWS; row++)
         for (var col = 0; col < App.Board.TOTAL_COLUMNS; col++)
@@ -59,6 +68,7 @@
       return score.reached(MAX_SCORE);
     },
 
+    // NOTE: Intentionally long function body to improve speed.
     _computeDiscScore: function(row, col){
       var value = this._board.get(row, col),
           score = new App.Score();
@@ -89,7 +99,7 @@
     },
 
     _getScore: function(row, col){
-      if ( this._scores[row] ) return this._scores[row][col];
+      return this._scores[row] ? this._scores[row][col] : 0;
     }
 
   };

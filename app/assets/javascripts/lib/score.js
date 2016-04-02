@@ -30,7 +30,6 @@
 
   function createAdderFunction(direction){
     return function(other){
-      if (!other) return;
       this[direction] += other[direction];
     };
   }
