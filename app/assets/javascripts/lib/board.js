@@ -3,6 +3,12 @@
   App.Board = function(){
     this.arbiter = new App.Arbiter(this);
 
+    this._state = {
+      columns: [],
+      pieceCount: 0,
+      activeSymbol: null
+    };
+
     this._initColumns();
     this._pieceCount = 0;
     this._activeSymbol = null;
