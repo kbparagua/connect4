@@ -49,12 +49,13 @@
     },
 
     canDropTo: function(column){
-      return this.state().columns[column].length < App.Board.TOTAL_ROWS;;
+      return this.arbiter.gameOver() ||
+        this.state().columns[column].length < App.Board.TOTAL_ROWS;;
     },
 
-    dropToWithEvent: function(column){
+    playerDropTo: function(column){
       this.dropTo(column);
-      this.trigger('symbol:new', this.state().activeSymbol, column);
+      this.trigger('player:move', this.state().activeSymbol, column);
     },
 
     dropTo: function(column){

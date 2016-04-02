@@ -1,10 +1,24 @@
 App.SimpleBot = function(symbol){
+  this._playingBoard = null;
   this._symbol = symbol;
   this._bestMove = null;
   this._defaultLookahead = 5;
 };
 
 App.SimpleBot.prototype = {
+
+  playOn: function(board){
+    this._playingBoard = board;
+    this._playingBoard.on('player:move', this._respondToPlayerMove.bind(this));
+  },
+
+  _respondToPlayerMove: function(symbol, column){
+    // Do not respond to own move.
+    if (this._symbol === symbol) return;
+
+    var score = this.minimax(this._playingBoard);
+    this._playingBoard.playerDropTo(this._bestMove);
+  },
 
   minimax: function(board, desiredLookahead){
     var _this = this,

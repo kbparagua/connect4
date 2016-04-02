@@ -14,9 +14,12 @@
 $(function(){
 
   var board = new App.Board(),
-      boardView = new App.BoardView({model: board});
+      boardView = new App.BoardView({model: board, bot: true});
 
   boardView.render();
   $(document.body).append( boardView.$el );
+
+  var bot = new App.SimpleBot( App.Board.PLAYER_2_SYMBOL );
+  bot.playOn(board);
 
 });
