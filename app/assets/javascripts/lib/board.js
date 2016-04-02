@@ -23,12 +23,11 @@
     },
 
     isFull: function(){
-      console.log(this._pieceCount + ' == ' + TOTAL_PIECES);
       return this._pieceCount == TOTAL_PIECES;
     },
 
     canDropTo: function(column){
-      return this._columns[column].length < App.Board.TOTAL_COLUMNS;
+      return this._columns[column].length < App.Board.TOTAL_ROWS;;
     },
 
     dropTo: function(column){
