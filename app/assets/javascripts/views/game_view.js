@@ -9,16 +9,30 @@ App.GameView = Backbone.View.extend({
 
   render: function(){
     this.$el.html( this.template() );
-    this._appendBoard();
+    this._appendBoardView();
 
     return this;
   },
 
-  _appendBoard: function(){
-    var boardView = new App.BoardView({model: this._board});
+  _appendBoardView: function(){
+    var boardView = this._createBoardView();
     boardView.render();
 
     this.$('.js-board-container:first').append( boardView.$el );
+  },
+
+  _createBoardView: function(){
+    var view =
+      new App.BoardView({
+        model: this._board,
+        onColumnClick: this._columnClicked.bind(this)
+      });
+
+    return view;
+  },
+
+  _columnClicked: function(column){
+    this.model.dropTo(column);
   }
 
 });
