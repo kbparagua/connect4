@@ -1,0 +1,16 @@
+.menu {
+
+  margin: 3px 10px;
+
+  a {
+    @extend .btn;
+  }
+
+  .two-player {
+    @extend .btn-primary;
+  }
+
+  .vs-computer {
+    @extend .btn-danger;
+  }
+}

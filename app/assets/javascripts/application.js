@@ -12,14 +12,5 @@
 //= require views
 
 $(function(){
-
-  var board = new App.Board(),
-      boardView = new App.BoardView({model: board});
-
-  boardView.render();
-  $(document.body).append( boardView.$el );
-
-  var bot = new App.SimpleBot( App.Board.PLAYER_2_SYMBOL );
-  bot.playOn(board);
-
+  var menuView = new App.MenuView({el: $('.js-menu:first')[0]});
 });
