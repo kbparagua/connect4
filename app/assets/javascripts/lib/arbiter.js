@@ -44,7 +44,7 @@
       return this._status === ONGOING;
     },
 
-    _hasWinner: function(){      
+    _hasWinner: function(){
       if ( this._board.getState('droppedDiscs') < MAX_SCORE ) return false;
 
       for (var row = 0; row < App.Board.TOTAL_ROWS; row++)
@@ -56,7 +56,7 @@
 
     _discWins: function(row, col){
       var score = this._computeDiscScore(row, col);
-      return this._reachedMax(score);
+      return score.reached(MAX_SCORE);
     },
 
     _computeDiscScore: function(row, col){
@@ -90,18 +90,6 @@
 
     _getScore: function(row, col){
       if ( this._scores[row] ) return this._scores[row][col];
-    },
-
-    _reachedMax: function(score){
-      switch(MAX_SCORE){
-          case score.horizontal:
-          case score.vertical:
-          case score.leftDiagonal:
-          case score.rightDiagonal:
-            return true;
-          default:
-            return false;
-      }
     }
 
   };
