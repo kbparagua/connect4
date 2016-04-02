@@ -1,5 +1,5 @@
 .board {
-  
+
   .column {
     display: inline-block;
 
@@ -7,6 +7,12 @@
       width: 100px;
       height: 100px;
       border: solid 1px green;
+      margin: 4px;
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: gray;
     }
   }
 }
