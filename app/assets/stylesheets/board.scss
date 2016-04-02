@@ -5,8 +5,8 @@
 
     .cell {
       background: #34495e;
-      width: 85px;
-      height: 85px;
+      width: 70px;
+      height: 70px;
       margin: 6px 4px;
 
       .disc {
@@ -32,6 +32,6 @@
 
 .board-player-2 {
   .column:hover {
-    border-color: #f1c40f; 
+    border-color: #f1c40f;
   }
 }
