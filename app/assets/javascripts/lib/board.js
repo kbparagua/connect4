@@ -29,13 +29,11 @@
     },
 
     dropTo: function(column){
-      var disc = new App.Disc( this._activeSymbol );
-
       for (var r = 0; r < TOTAL_ROWS; r++){
         var targetCell = this._grid[r][column];
 
         if ( targetCell == null ){
-          this._grid[r][column] = disc
+          this._placeDisc(r, column);
           return true;
         }
       }
@@ -77,10 +75,19 @@
       return output;
     },
 
+    _placeDisc: function(row, col){
+      var disc = new App.Disc(this._activeSymbol);
+      this._grid[row][col] = disc;
+
+      this.trigger('disc:new', disc, {row: row, col: col});
+    },
+
     _initGrid: function(){
       this._grid = [];
       for (var row = 0; row < TOTAL_ROWS; row++) this._grid[row] = [];
     },
   };
+
+  _.extend(App.Board.prototype, Backbone.Events);
 
 })();

@@ -3,7 +3,9 @@ App.BoardView = Backbone.View.extend({
   className: 'js-board board',
 
   initialize: function(options){
+    this.listenTo(this.model, 'disc:new', this._newDisc);
     this._onColumnClick = options.onColumnClick;
+    this._columnViews = [];
   },
 
   render: function(){
@@ -14,10 +16,8 @@ App.BoardView = Backbone.View.extend({
   },
 
   _appendColumnViews: function(){
-    var columns = this._getColumnViews();
-
-    for (var i = 0, n = columns.length; i < n; i++){
-      var column = columns[i];
+    for (var i = 0, n = this._getColumnViews().length; i < n; i++){
+      var column = this._getColumnViews()[i];
 
       column.render();
       this.$el.append( column.$el );
@@ -25,14 +25,14 @@ App.BoardView = Backbone.View.extend({
   },
 
   _getColumnViews: function(){
-    var columnViews = [];
+    if (this._columnViews.length) return this._columnViews;
 
     for (var c = 0; c < this.model.totalColumns; c++){
-      var columnView = this._createColumnView(c);
-      columnViews.push(columnView);
+      var view = this._createColumnView(c);
+      this._columnViews.push(view);
     }
 
-    return columnViews;
+    return this._columnViews;
   },
 
   _createColumnView: function(col){
@@ -47,6 +47,15 @@ App.BoardView = Backbone.View.extend({
 
   _triggerOnColumnClick: function(column){
     if (this._onColumnClick) this._onColumnClick(column);
+  },
+
+  _newDisc: function(disc, position){
+    var columnView = this._getColumnViews()[position.col];
+
+    var maxRow = this.model.totalRows - 1,
+        invertedRow = maxRow - position.row;
+
+    columnView.addDisc(invertedRow);
   }
 
 });
