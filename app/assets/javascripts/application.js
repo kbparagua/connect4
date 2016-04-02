@@ -14,7 +14,7 @@
 $(function(){
 
   var board = new App.Board(),
-      boardView = new App.BoardView({model: board, bot: true});
+      boardView = new App.BoardView({model: board});
 
   boardView.render();
   $(document.body).append( boardView.$el );
