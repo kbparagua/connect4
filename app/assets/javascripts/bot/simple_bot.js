@@ -11,13 +11,17 @@
 
     playOn: function(board){
       this._playingBoard = board;
-      this._playingBoard.on('player:drop', this._respondToPlayerMove.bind(this));
+      this._playingBoard.on('player:drop', this._respondToMove.bind(this));
     },
 
-    _respondToPlayerMove: function(symbol, column){
+    _respondToMove: function(symbol){
       // Do not respond to own move.
-      if (this._symbol === symbol) return;
+      if ( symbol === this._symbol ) return;
 
+      setTimeout(this._respondToPlayerMove.bind(this), 1000);
+    },
+
+    _respondToPlayerMove: function(){
       // Do not respond when game is over.
       if ( this._playingBoard.arbiter.gameOver() ) return;
 
