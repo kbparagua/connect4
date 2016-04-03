@@ -1,7 +1,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require bootstrap-sprockets
 
 //= require ./underscore-min.js
 //= require ./backbone-min.js
