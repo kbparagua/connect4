@@ -1,6 +1,6 @@
 (function(){
 
-  var DEFAULT_LOOKAHEAD = 6;
+  var MAX_SIMULATED_TURNS = 5;
 
   App.SimpleBot = function(symbol){
     this._playingBoard = null;
@@ -24,24 +24,23 @@
 
     _respondToPlayerMove: function(){
       if ( this._playingBoard.arbiter.ongoing() ){
-        var bestMove = this._bestMove(this._playingBoard);
+        var bestMove = this._bestMove(this._playingBoard, 0);
         this._playingBoard.playerDropTo( bestMove.column );
       }
 
       this._playingBoard.unlock();
     },
 
-    _bestMove: function(board, desiredLookahead){
-      if (desiredLookahead === 0) return this._finalMove(board);
+    _bestMove: function(board, turn){
+      turn++;
 
-      var arbiter = board.arbiter,
-          lookahead = desiredLookahead || DEFAULT_LOOKAHEAD;
-
+      var arbiter = board.arbiter;
       arbiter.checkStatus();
-      if ( arbiter.gameOver() ) return this._finalMove(board);
 
-      lookahead--;
-      var moves = this._nextMoves(board, lookahead);
+      if ( turn > MAX_SIMULATED_TURNS || arbiter.gameOver() )
+        return this._finalMove(board, turn);
+
+      var moves = this._nextMoves(board, turn);
 
       return this._myTurn(board) ?
         this._getMinScoreMove(moves) :
@@ -56,7 +55,7 @@
       var choice = null;
 
       _.each(moves, function(move){
-        if (!choice || choice.score <= move.score) choice = move;
+        if (!choice || choice.score < move.score) choice = move;
       });
 
       return choice;
@@ -66,31 +65,31 @@
       var choice = null;
 
       _.each(moves, function(move){
-        if (!choice || choice.score >= move.score) choice = move;
+        if (!choice || choice.score > move.score) choice = move;
       });
 
       return choice;
     },
 
-    _nextMoves: function(board, lookahead){
+    _nextMoves: function(board, turn){
       var _this = this;
 
       return _.map(board.legalColumns(), function(column){
         board.pushSymbolTo(column);
-        var bestMove = _this._bestMove(board, lookahead);
+        var bestMove = _this._bestMove(board, turn);
         board.undoState();
 
         return {column: column, score: bestMove.score};
       });
     },
 
-    _finalMove: function(board){
+    _finalMove: function(board, turn){
       var score = 0;
 
-      if ( board.arbiter.gameOver() )
+      if ( board.arbiter.hasWinner() )
         score = this._myTurn(board) ? 10 : -10;
 
-      return {score: score, column: board.getState('lastChangedColumn')};
+      return {column: board.getState('lastChangedColumn'), score: score};
     }
 
   };
