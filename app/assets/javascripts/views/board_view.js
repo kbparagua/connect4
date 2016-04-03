@@ -50,7 +50,8 @@ App.BoardView = Backbone.View.extend({
   },
 
   _columnClicked: function(column){
-    if ( this.model.canDropTo(column) ) this.model.playerDropTo(column);
+    if ( this.model.isUnlocked() && this.model.canDropTo(column) )
+      this.model.playerDropTo(column);
   },
 
   _dropDisc: function(symbol, column){

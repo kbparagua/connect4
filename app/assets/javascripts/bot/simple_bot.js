@@ -18,16 +18,17 @@
       // Do not respond to own move.
       if ( symbol === this._symbol ) return;
 
+      this._playingBoard.lock();
       setTimeout(this._respondToPlayerMove.bind(this), 1000);
     },
 
     _respondToPlayerMove: function(){
-      // Do not respond when game is over.
-      if ( this._playingBoard.arbiter.gameOver() ) return;
+      if ( this._playingBoard.arbiter.ongoing() ){
+        var bestMove = this._bestMove(this._playingBoard);
+        this._playingBoard.playerDropTo( bestMove.column );
+      }
 
-      var bestMove = this._bestMove(this._playingBoard);
-
-      this._playingBoard.playerDropTo( bestMove.column );
+      this._playingBoard.unlock();
     },
 
     _bestMove: function(board, desiredLookahead){
