@@ -5,6 +5,8 @@
 
     this._history = [this._initialState()];
     this._initColumns();
+
+    this._locked = false;
   };
 
   App.Board.TOTAL_ROWS = 6;
@@ -16,6 +18,18 @@
   App.Board.TOTAL_DISCS = App.Board.TOTAL_ROWS * App.Board.TOTAL_COLUMNS;
 
   App.Board.prototype = {
+
+    lock: function(){
+      this._locked = true;
+    },
+
+    unlock: function(){
+      this._locked = false;
+    },
+
+    isUnlocked: function(){
+      return !this._locked;
+    },
 
     nextSymbol: function(){
       return this.getState('activeSymbol') === App.Board.PLAYER_1_SYMBOL ?

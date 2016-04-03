@@ -11,19 +11,24 @@
 
     playOn: function(board){
       this._playingBoard = board;
-      this._playingBoard.on('player:drop', this._respondToPlayerMove.bind(this));
+      this._playingBoard.on('player:drop', this._respondToMove.bind(this));
     },
 
-    _respondToPlayerMove: function(symbol, column){
+    _respondToMove: function(symbol){
       // Do not respond to own move.
-      if (this._symbol === symbol) return;
+      if ( symbol === this._symbol ) return;
 
-      // Do not respond when game is over.
-      if ( this._playingBoard.arbiter.gameOver() ) return;
+      this._playingBoard.lock();
+      setTimeout(this._respondToPlayerMove.bind(this), 1000);
+    },
 
-      var bestMove = this._bestMove(this._playingBoard);
+    _respondToPlayerMove: function(){
+      if ( this._playingBoard.arbiter.ongoing() ){
+        var bestMove = this._bestMove(this._playingBoard);
+        this._playingBoard.playerDropTo( bestMove.column );
+      }
 
-      this._playingBoard.playerDropTo( bestMove.column );
+      this._playingBoard.unlock();
     },
 
     _bestMove: function(board, desiredLookahead){
